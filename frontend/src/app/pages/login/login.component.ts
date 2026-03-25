@@ -9,61 +9,68 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 flex items-center justify-center p-4">
-      <div class="w-full max-w-md">
+    <div class="min-h-screen bg-[#F3F4F6] flex items-center justify-center p-4 relative overflow-hidden">
+      <!-- Decorative Background Elements to match Dashboard -->
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-yellow-100/50 blur-[100px] rounded-full"></div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-gray-200/50 blur-[100px] rounded-full"></div>
+
+      <div class="w-full max-w-md relative z-10">
         <!-- Logo / Brand -->
-        <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur rounded-2xl mb-4">
-            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="text-center mb-10">
+          <div class="inline-flex items-center justify-center w-20 h-20 bg-[#1C1C1C] rounded-[2.5rem] mb-6 shadow-xl shadow-black/10">
+            <svg class="w-10 h-10 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
             </svg>
           </div>
-          <h1 class="text-3xl font-bold text-white">Student Analytics</h1>
-          <p class="text-blue-200 mt-2 text-sm">Performance Management System</p>
+          <h1 class="text-4xl font-black text-[#1C1C1C] tracking-tight">Student Analytics</h1>
+          <p class="text-gray-500 mt-2 text-sm font-medium italic">Faculty Portal • Performance Management</p>
         </div>
 
         <!-- Login Card -->
-        <div class="bg-white rounded-2xl shadow-2xl p-8">
-          <h2 class="text-xl font-semibold text-gray-800 mb-6">Sign in to your account</h2>
+        <div class="bg-white rounded-[3rem] shadow-sm border border-gray-100 p-10">
+          <h2 class="text-2xl font-bold text-[#1C1C1C] mb-8">Sign In</h2>
 
-          <div *ngIf="error" class="bg-red-50 border border-red-200 rounded-lg p-3 mb-4 text-red-700 text-sm flex items-center gap-2">
-            <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <div *ngIf="error" class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-6 text-red-600 text-sm flex items-center gap-3 animate-shake">
+            <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
             </svg>
-            {{ error }}
+            <span class="font-medium">{{ error }}</span>
           </div>
 
-          <div class="space-y-4">
+          <div class="space-y-6">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+              <label class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">Email Address</label>
               <input type="email" [(ngModel)]="email" placeholder="teacher@school.com"
-                class="input-field" (keyup.enter)="login()">
+                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-4 text-sm focus:ring-2 focus:ring-yellow-400 transition-all placeholder:text-gray-300" 
+                (keyup.enter)="login()">
             </div>
+            
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input type="password" [(ngModel)]="password" placeholder="Enter your password"
-                class="input-field" (keyup.enter)="login()">
+              <label class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">Password</label>
+              <input type="password" [(ngModel)]="password" placeholder="••••••••"
+                class="w-full bg-gray-50 border-none rounded-2xl px-5 py-4 text-sm focus:ring-2 focus:ring-yellow-400 transition-all placeholder:text-gray-300" 
+                (keyup.enter)="login()">
             </div>
 
             <button (click)="login()" [disabled]="loading"
-              class="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-semibold py-3 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
-              <span *ngIf="loading" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-              {{ loading ? 'Signing in...' : 'Sign In' }}
+              class="w-full bg-[#1C1C1C] hover:bg-black disabled:opacity-50 text-white font-bold py-5 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 mt-4 shadow-lg shadow-black/5 hover:shadow-black/10 hover:scale-[1.01] active:scale-[0.98]">
+              <span *ngIf="loading" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+              {{ loading ? 'Authenticating...' : 'Sign In' }}
             </button>
           </div>
 
           <!-- Demo Credentials -->
-          <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
-            <p class="text-xs font-semibold text-blue-700 mb-2">Demo Credentials</p>
-            <div class="space-y-1 text-xs text-blue-600">
-              <div class="flex gap-2">
-                <span class="font-medium">Teacher:</span>
-                <span>teacher&#64;school.com / any password</span>
+          <div class="mt-10 p-5 bg-gray-50 rounded-[2rem] border border-gray-100">
+            <p class="text-[10px] font-black text-[#1C1C1C] uppercase tracking-widest mb-3">Demo Access</p>
+            <div class="space-y-2 text-xs text-gray-500">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-gray-400">TEACHER</span>
+                <span class="font-medium text-[#1C1C1C]">teacher&#64;school.com</span>
               </div>
-              <div class="flex gap-2">
-                <span class="font-medium">Admin:</span>
-                <span>admin&#64;school.com / any password</span>
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-gray-400">ADMIN</span>
+                <span class="font-medium text-[#1C1C1C]">admin&#64;school.com</span>
               </div>
             </div>
           </div>
