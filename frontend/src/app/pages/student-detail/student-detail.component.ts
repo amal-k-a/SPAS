@@ -42,7 +42,7 @@ import { StudentAnalytics } from '../../models/models';
                 <div class="w-20 h-20 rounded-[2rem] bg-[#1C1C1C] flex items-center justify-center flex-shrink-0 shadow-xl shadow-black/5">
                   <span class="text-yellow-400 text-3xl font-bold">{{ getStudentName().charAt(0) }}</span>
                 </div>
-                
+
                 <div class="flex-1">
                   <div class="flex flex-wrap items-center gap-3">
                     <h2 class="text-2xl font-bold text-[#1C1C1C]">{{ getStudentName() }}</h2>
@@ -55,7 +55,7 @@ import { StudentAnalytics } from '../../models/models';
                 </div>
 
                 <div class="flex flex-wrap gap-3">
-                  <button (click)="editMode = !editMode" class="btn-secondary text-xs uppercase tracking-widest px-6">
+                  <button (click)="toggleEditMode()" class="btn-secondary text-xs uppercase tracking-widest px-6">
                     {{ editMode ? 'Cancel' : 'Edit Profile' }}
                   </button>
                   <button (click)="downloadReport()" [disabled]="downloading" class="btn-primary text-xs uppercase tracking-widest px-6">
@@ -125,15 +125,44 @@ import { StudentAnalytics } from '../../models/models';
                 </div>
 
                 <div class="card p-8 border-none overflow-hidden relative">
-                  <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Teacher Remarks</h3>
+                  <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">
+                    {{ editMode ? 'Edit Student Details' : 'Teacher Remarks' }}
+                  </h3>
+
                   <div *ngIf="!editMode">
                     <p class="text-sm text-gray-600 leading-relaxed italic">
                       "{{ getStudentRemarks() || 'No remarks added yet.' }}"
                     </p>
                   </div>
+
                   <div *ngIf="editMode" class="space-y-4">
+                    <div>
+                      <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Student Name</label>
+                      <input type="text" [(ngModel)]="editName" class="input-field" placeholder="Enter student name">
+                    </div>
+
                     <textarea [(ngModel)]="editRemarks" class="input-field" rows="3"
                       placeholder="Enter teacher remarks..."></textarea>
+
+                    <div>
+                      <div class="flex items-center justify-between mb-2">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase">Subject Marks</label>
+                        <button type="button" (click)="addSubjectField()" class="text-[10px] font-bold uppercase tracking-widest text-yellow-600">
+                          Add Subject
+                        </button>
+                      </div>
+
+                      <div class="space-y-2 max-h-52 overflow-y-auto pr-1">
+                        <div *ngFor="let mark of editMarks; let i = index" class="flex gap-2 items-center">
+                          <input type="text" [(ngModel)]="mark.key" class="input-field flex-1" placeholder="Subject">
+                          <input type="number" [(ngModel)]="mark.value" class="input-field w-24" min="0" max="100" placeholder="0">
+                          <button type="button" (click)="removeSubjectField(i)" class="px-3 py-3 rounded-2xl bg-rose-50 text-rose-600 text-xs font-bold">
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
                     <div class="flex gap-4">
                       <div class="flex-1">
                         <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Attendance %</label>
@@ -145,8 +174,10 @@ import { StudentAnalytics } from '../../models/models';
                         </button>
                       </div>
                     </div>
+
                     <p *ngIf="saveSuccess" class="text-emerald-600 text-[10px] font-bold uppercase text-center">Update Successful</p>
                   </div>
+
                   <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-yellow-400/10 rounded-full blur-2xl"></div>
                 </div>
               </div>
@@ -162,11 +193,14 @@ export class StudentDetailComponent implements OnInit {
   loading = true;
   sidebarCollapsed = false;
   editMode = false;
+  editName = '';
   editRemarks = '';
   editAttendance = 0;
+  editMarks: { key: string; value: number }[] = [];
   saving = false;
   saveSuccess = false;
   downloading = false;
+
   subjectComparisonChartOptions: ChartOptions<'radar'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -201,6 +235,7 @@ export class StudentDetailComponent implements OnInit {
       }
     }
   };
+
   performanceGaugeChartOptions: ChartOptions<'doughnut'> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -228,15 +263,27 @@ export class StudentDetailComponent implements OnInit {
     this.studentService.getStudentAnalytics(id).subscribe({
       next: (data) => {
         this.analytics = data;
-        this.editRemarks = data.student.remarks;
-        this.editAttendance = data.student.attendance;
+        this.resetEditState(data);
         this.loading = false;
       },
       error: () => { this.loading = false; }
     });
   }
 
-  // Safe getter methods - no null issues in templates
+  toggleEditMode() {
+    this.editMode = !this.editMode;
+    if (this.editMode && this.analytics) {
+      this.resetEditState(this.analytics);
+    }
+  }
+
+  resetEditState(data: StudentAnalytics) {
+    this.editName = data.student.name;
+    this.editRemarks = data.student.remarks;
+    this.editAttendance = data.student.attendance;
+    this.editMarks = this.toEditableMarks(data.student.marks);
+  }
+
   getStudentName(): string { return this.analytics?.student.name ?? ''; }
   getStudentId(): string { return this.analytics?.student.studentId ?? ''; }
   getStudentStatus(): string { return this.analytics?.student.status ?? ''; }
@@ -251,9 +298,11 @@ export class StudentDetailComponent implements OnInit {
   getDiff(): string {
     return Math.abs(this.getStudentAverage() - this.getClassAverage()).toFixed(1);
   }
+
   getDiffSign(): string {
     return this.getStudentAverage() >= this.getClassAverage() ? '+' : '-';
   }
+
   getDiffClass(): string {
     return this.getStudentAverage() >= this.getClassAverage() ? 'text-green-600' : 'text-red-500';
   }
@@ -322,44 +371,61 @@ export class StudentDetailComponent implements OnInit {
       .join(' ');
   }
 
-  getBarColor(v: number): string {
-    if (v >= 75) return 'bg-green-500';
-    if (v >= 60) return 'bg-blue-500';
-    if (v >= 45) return 'bg-yellow-500';
-    return 'bg-red-500';
-  }
-
-  getPerformanceLabel(v: number): string {
-    if (v >= 80) return 'Excellent';
-    if (v >= 60) return 'Good';
-    if (v >= 40) return 'Needs Improvement';
-    return 'Critical';
-  }
-
   getStatusClass(status: string): string {
     const map: Record<string, string> = {
-      'Excellent': 'badge-excellent', 'Good': 'badge-good',
-      'Average': 'badge-average', 'At Risk': 'badge-risk'
+      'Excellent': 'badge-excellent',
+      'Good': 'badge-good',
+      'Average': 'badge-average',
+      'At Risk': 'badge-risk'
     };
     return map[status] || 'badge-average';
   }
 
+  toEditableMarks(marks: Record<string, number>) {
+    return Object.entries(marks).map(([key, value]) => ({ key, value }));
+  }
+
+  addSubjectField() {
+    this.editMarks.push({ key: '', value: 0 });
+  }
+
+  removeSubjectField(index: number) {
+    this.editMarks.splice(index, 1);
+  }
+
   saveChanges() {
     if (!this.analytics) return;
+
+    const marks = this.editMarks.reduce((acc, item) => {
+      const key = item.key.trim().toLowerCase();
+      if (key) {
+        acc[key] = Number(item.value) || 0;
+      }
+      return acc;
+    }, {} as Record<string, number>);
+
     this.saving = true;
     this.studentService.updateStudent(this.analytics.student._id, {
+      name: this.editName.trim(),
       remarks: this.editRemarks,
       attendance: this.editAttendance,
-      marks: this.analytics.student.marks
+      marks
     }).subscribe({
       next: () => {
         this.saving = false;
         this.saveSuccess = true;
+
         if (this.analytics) {
+          this.analytics.student.name = this.editName.trim();
           this.analytics.student.remarks = this.editRemarks;
           this.analytics.student.attendance = this.editAttendance;
+          this.analytics.student.marks = marks;
         }
-        setTimeout(() => { this.saveSuccess = false; this.editMode = false; }, 2000);
+
+        setTimeout(() => {
+          this.saveSuccess = false;
+          this.editMode = false;
+        }, 2000);
       },
       error: () => { this.saving = false; }
     });
@@ -370,6 +436,7 @@ export class StudentDetailComponent implements OnInit {
     this.downloading = true;
     const studentId = this.analytics.student._id;
     const studentFileId = this.analytics.student.studentId;
+
     this.studentService.downloadReport(studentId).subscribe({
       next: (blob) => {
         const url = URL.createObjectURL(blob);

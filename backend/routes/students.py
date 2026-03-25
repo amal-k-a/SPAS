@@ -98,18 +98,14 @@ def create_student():
 @students_bp.route('/<student_id>', methods=['PUT'])
 @token_required
 def update_student(student_id):
-    data = request.get_json()
+    data = request.get_json() or {}
     col = get_collection('students')
-    
-    update_data = {
-        'marks': data.get('marks', {}),
-        'attendance': data.get('attendance', 0),
-        'remarks': data.get('remarks', ''),
-        'updated_at': datetime.datetime.utcnow()
-    }
-    if 'name' in data:
-        update_data['name'] = data['name']
-    
+
+    update_data = {'updated_at': datetime.datetime.utcnow()}
+    for field in ['name', 'marks', 'attendance', 'remarks']:
+        if field in data:
+            update_data[field] = data[field]
+
     try:
         col.update_one({'_id': ObjectId(student_id)}, {'$set': update_data})
     except:

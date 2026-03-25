@@ -35,6 +35,8 @@ export interface AuthResponse {
   token: string;
   name: string;
   role: string;
+  email: string;
+  isFirstLogin: boolean;
 }
 
 export interface UploadResponse {

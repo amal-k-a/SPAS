@@ -106,6 +106,15 @@ import { Router } from '@angular/router';
             </div>
           </div>
 
+          <button *ngIf="!collapsed" (click)="goToChangePassword()" class="logout-btn w-full flex items-center justify-center gap-2 mt-3 px-3 py-2 rounded-xl text-gray-500"
+            style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500;">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2h-1V9a5 5 0 00-10 0v2H6a2 2 0 00-2 2v6a2 2 0 002 2zm3-10V9a3 3 0 116 0v2H9z"/>
+            </svg>
+            Change Password
+          </button>
+
           <button *ngIf="!collapsed" (click)="logout()" class="logout-btn w-full flex items-center justify-center gap-2 mt-3 px-3 py-2 rounded-xl text-gray-500"
             style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500;">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,6 +151,10 @@ export class SidebarComponent {
   get role() { return localStorage.getItem('userRole') || 'Teacher'; }
 
   constructor(private authService: AuthService, private router: Router) {}
+
+  goToChangePassword() {
+    this.router.navigate(['/change-password']);
+  }
 
   logout() {
     this.authService.logout();

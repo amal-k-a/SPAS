@@ -15,12 +15,13 @@ export class AuthService {
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap(res => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('userName', res.name);
-        localStorage.setItem('userRole', res.role);
-        this.loggedIn.next(true);
-      })
+      tap(res => this.persistAuth(res))
+    );
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/change-password`, { currentPassword, newPassword }).pipe(
+      tap(res => this.persistAuth(res))
     );
   }
 
@@ -43,5 +44,18 @@ export class AuthService {
 
   getRole(): string {
     return localStorage.getItem('userRole') || '';
+  }
+
+  isFirstLogin(): boolean {
+    return localStorage.getItem('isFirstLogin') === 'true';
+  }
+
+  private persistAuth(res: AuthResponse): void {
+    localStorage.setItem('token', res.token);
+    localStorage.setItem('userName', res.name);
+    localStorage.setItem('userRole', res.role);
+    localStorage.setItem('userEmail', res.email);
+    localStorage.setItem('isFirstLogin', String(res.isFirstLogin));
+    this.loggedIn.next(true);
   }
 }
