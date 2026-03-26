@@ -8,6 +8,14 @@ import datetime
 
 students_bp = Blueprint('students', __name__)
 
+def current_owner_id():
+    return request.user.get('user_id')
+
+def apply_owner_scope(query=None):
+    scoped_query = dict(query or {})
+    scoped_query['ownerId'] = current_owner_id()
+    return scoped_query
+
 def serialize_student(s):
     s['_id'] = str(s['_id'])
     return s
@@ -41,7 +49,7 @@ def get_students():
             {'studentId': {'$regex': search, '$options': 'i'}}
         ]
     
-    students = list(col.find(query))
+    students = list(col.find(apply_owner_scope(query)))
     result = []
     for s in students:
         avg = calculate_average(s.get('marks', {}))
@@ -60,9 +68,9 @@ def get_students():
 def get_student(student_id):
     col = get_collection('students')
     try:
-        s = col.find_one({'_id': ObjectId(student_id)})
+        s = col.find_one(apply_owner_scope({'_id': ObjectId(student_id)}))
     except:
-        s = col.find_one({'studentId': student_id})
+        s = col.find_one(apply_owner_scope({'studentId': student_id}))
     
     if not s:
         return jsonify({'error': 'Student not found'}), 404
@@ -79,7 +87,7 @@ def create_student():
     col = get_collection('students')
     
     # Check duplicate
-    if col.find_one({'studentId': data.get('studentId')}):
+    if col.find_one(apply_owner_scope({'studentId': data.get('studentId')})):
         return jsonify({'error': 'Student ID already exists'}), 400
     
     student = {
@@ -88,6 +96,7 @@ def create_student():
         'marks': data.get('marks', {}),
         'attendance': data.get('attendance', 0),
         'remarks': data.get('remarks', ''),
+        'ownerId': current_owner_id(),
         'created_at': datetime.datetime.utcnow(),
         'updated_at': datetime.datetime.utcnow()
     }
@@ -107,9 +116,12 @@ def update_student(student_id):
             update_data[field] = data[field]
 
     try:
-        col.update_one({'_id': ObjectId(student_id)}, {'$set': update_data})
+        result = col.update_one(apply_owner_scope({'_id': ObjectId(student_id)}), {'$set': update_data})
     except:
-        col.update_one({'studentId': student_id}, {'$set': update_data})
+        result = col.update_one(apply_owner_scope({'studentId': student_id}), {'$set': update_data})
+
+    if not result.matched_count:
+        return jsonify({'error': 'Student not found'}), 404
     
     return jsonify({'message': 'Updated successfully'})
 
@@ -118,9 +130,11 @@ def update_student(student_id):
 def delete_student(student_id):
     col = get_collection('students')
     try:
-        col.delete_one({'_id': ObjectId(student_id)})
+        result = col.delete_one(apply_owner_scope({'_id': ObjectId(student_id)}))
     except:
-        col.delete_one({'studentId': student_id})
+        result = col.delete_one(apply_owner_scope({'studentId': student_id}))
+    if not result.deleted_count:
+        return jsonify({'error': 'Student not found'}), 404
     return jsonify({'message': 'Deleted successfully'})
 
 @students_bp.route('/upload', methods=['POST'])
@@ -173,12 +187,13 @@ def upload_students():
                     'marks': marks,
                     'attendance': attendance,
                     'remarks': remarks,
+                    'ownerId': current_owner_id(),
                     'updated_at': datetime.datetime.utcnow()
                 }
                 
-                existing = col.find_one({'studentId': student_id})
+                existing = col.find_one(apply_owner_scope({'studentId': student_id}))
                 if existing:
-                    col.update_one({'studentId': student_id}, {'$set': student_data})
+                    col.update_one(apply_owner_scope({'studentId': student_id}), {'$set': student_data})
                     updated += 1
                 else:
                     student_data['created_at'] = datetime.datetime.utcnow()

@@ -1,0 +1,71 @@
+student_id,name,attendance,math,science,english,history,remarks
+23BCNA01,James Smith,59,37,96,48,47,Average performance - some subjects need attention
+23BCNA02,Maria Garcia,100,79,56,75,88,Average performance - some subjects need attention
+23BCNA03,Robert Johnson,54,67,33,61,69,Average performance - some subjects need attention
+23BCNA04,Maria Rodriguez,61,74,49,31,78,Average performance - some subjects need attention
+23BCNA05,Michael Smith,50,82,81,43,48,Average performance - some subjects need attention
+23BCNA06,Maria Hernandez,78,87,65,92,35,Average performance - some subjects need attention
+23BCNA07,David Smith,82,67,80,39,73,Average performance - some subjects need attention
+23BCNA08,Maria Martinez,64,69,63,55,96,Average performance - some subjects need attention
+23BCNA09,Richard Rodriguez,62,35,37,44,72,At risk - requires immediate intervention
+23BCNA10,Maria Gonzalez,63,76,55,42,60,Average performance - some subjects need attention
+23BCNA11,Joseph Garcia,52,73,87,50,30,Average performance - some subjects need attention
+23BCNA12,Maria Perez,45,67,94,74,86,Good overall performance
+23BCNA13,Thomas Johnson,76,49,74,99,94,Good overall performance
+23BCNA14,Maria Sanchez,67,38,91,90,63,Average performance - some subjects need attention
+23BCNA15,Charles Smith,98,89,49,76,33,Average performance - some subjects need attention
+23BCNA16,Maria Ramirez,82,72,56,33,57,Average performance - some subjects need attention
+23BCNA17,Christopher Rodriguez,63,71,63,83,70,Average performance - some subjects need attention
+23BCNA18,Maria Cruz,97,73,98,82,38,Average performance - some subjects need attention
+23BCNA19,Daniel Garcia,93,58,82,51,94,Average performance - some subjects need attention
+23BCNA20,Maria Gomez,69,42,85,89,40,Average performance - some subjects need attention
+23BCNA21,Matthew Smith,77,37,50,90,61,Average performance - some subjects need attention
+23BCNA22,Maria Flores,51,51,84,84,32,Average performance - some subjects need attention
+23BCNA23,Anthony Johnson,56,50,49,61,56,Average performance - some subjects need attention
+23BCNA24,Maria Morales,63,42,68,32,54,Steady progress being made
+23BCNA25,Donald Rodriguez,55,30,42,74,83,Average performance - some subjects need attention
+23BCNA26,Maria Vazquez,88,39,38,78,38,At risk - requires immediate intervention
+23BCNA27,Mark Garcia,93,94,56,45,76,Average performance - some subjects need attention
+23BCNA28,Maria Jimenez,74,88,45,40,67,Average performance - some subjects need attention
+23BCNA29,Paul Smith,68,70,62,94,57,Average performance - some subjects need attention
+23BCNA30,Maria Reyes,79,86,100,65,31,Average performance - some subjects need attention
+23BCNA31,Steven Johnson,87,31,58,61,78,Average performance - some subjects need attention
+23BCNA32,Maria Diaz,98,78,83,72,56,Average performance - some subjects need attention
+23BCNA33,Andrew Rodriguez,87,71,71,64,46,Average performance - some subjects need attention
+23BCNA34,Maria Torres,94,43,64,86,94,Average performance - some subjects need attention
+23BCNA35,Kenneth Garcia,94,72,98,72,45,Average performance - some subjects need attention
+23BCNA36,Maria Gutierrez,61,66,67,81,42,Average performance - some subjects need attention
+23BCNA37,Joshua Smith,87,72,85,64,48,Average performance - some subjects need attention
+23BCNA38,Maria Ruiz,59,34,73,95,56,Average performance - some subjects need attention
+23BCNA39,Kevin Johnson,54,58,81,90,44,Average performance - some subjects need attention
+23BCNA40,Maria Alvardo,46,35,35,82,45,At risk - requires immediate intervention
+23BCNA41,Brian Rodriguez,59,98,35,75,89,Average performance - some subjects need attention
+23BCNA42,Maria Castro,86,36,91,97,86,Good overall performance
+23BCNA43,Edward Garcia,41,89,46,74,52,Average performance - some subjects need attention
+23BCNA44,Maria Ortega,64,77,94,63,72,Good overall performance
+23BCNA45,Ronald Smith,86,50,98,45,30,Average performance - some subjects need attention
+23BCNA46,Maria Santos,92,59,64,34,45,Average performance - some subjects need attention
+23BCNA47,Timothy Johnson,86,62,71,51,92,Average performance - some subjects need attention
+23BCNA48,Maria Guzman,61,83,72,38,56,Average performance - some subjects need attention
+23BCNA49,Jason Rodriguez,40,30,73,98,34,Average performance - some subjects need attention
+23BCNA50,Maria Castillo,41,72,54,85,53,Average performance - some subjects need attention
+23BCNA51,Jeffrey Garcia,71,86,57,60,53,Average performance - some subjects need attention
+23BCNA52,Maria Mendez,93,77,86,92,44,Average performance - some subjects need attention
+23BCNA53,Ryan Smith,83,80,68,49,90,Average performance - some subjects need attention
+23BCNA54,Maria Cabrera,46,41,41,39,91,Average performance - some subjects need attention
+23BCNA55,Jacob Johnson,79,45,42,45,31,Steady progress being made
+23BCNA56,Maria Portillo,52,82,88,98,54,Good overall performance
+23BCNA57,Gary Rodriguez,66,44,83,70,83,Average performance - some subjects need attention
+23BCNA58,Maria Salazar,43,83,36,49,48,Average performance - some subjects need attention
+23BCNA59,Nicholas Garcia,76,37,50,46,31,At risk - requires immediate intervention
+23BCNA60,Maria Vasquez,66,35,35,30,67,At risk - requires immediate intervention
+23BCNA61,Eric Smith,52,97,66,36,35,Average performance - some subjects need attention
+23BCNA62,Maria Valenzuela,49,31,76,31,45,At risk - requires immediate intervention
+23BCNA63,Jonathan Johnson,74,60,59,80,90,Average performance - some subjects need attention
+23BCNA64,Maria Carrillo,56,46,71,80,97,Average performance - some subjects need attention
+23BCNA65,Stephen Rodriguez,41,97,96,51,92,Good overall performance
+23BCNA66,Maria Palma,66,71,39,42,70,Average performance - some subjects need attention
+23BCNA67,Larry Garcia,71,33,92,42,70,Average performance - some subjects need attention
+23BCNA68,Maria Villar,81,31,75,39,43,At risk - requires immediate intervention
+23BCNA69,Justin Smith,79,72,94,41,60,Average performance - some subjects need attention
+23BCNA70,Maria Rojas,45,80,33,82,34,Average performance - some subjects need attention

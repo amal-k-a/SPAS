@@ -15,6 +15,14 @@ import datetime
 
 reports_bp = Blueprint('reports', __name__)
 
+def current_owner_id():
+    return request.user.get('user_id')
+
+def apply_owner_scope(query=None):
+    scoped_query = dict(query or {})
+    scoped_query['ownerId'] = current_owner_id()
+    return scoped_query
+
 def calculate_average(marks):
     if not marks:
         return 0
@@ -43,15 +51,15 @@ def get_status(avg, attendance):
 def generate_pdf(student_id):
     col = get_collection('students')
     try:
-        s = col.find_one({'_id': ObjectId(student_id)})
+        s = col.find_one(apply_owner_scope({'_id': ObjectId(student_id)}))
     except:
-        s = col.find_one({'studentId': student_id})
+        s = col.find_one(apply_owner_scope({'studentId': student_id}))
     
     if not s:
         return jsonify({'error': 'Student not found'}), 404
     
     # Get class data for comparison
-    all_students = list(col.find({}))
+    all_students = list(col.find(apply_owner_scope()))
     class_avgs = [calculate_average(st.get('marks', {})) for st in all_students]
     class_avg = round(sum(class_avgs) / len(class_avgs), 2) if class_avgs else 0
 

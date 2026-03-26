@@ -1,9 +1,17 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from database import get_collection
 from utils.auth_middleware import token_required
 from collections import defaultdict
 
 analytics_bp = Blueprint('analytics', __name__)
+
+def current_owner_id():
+    return request.user.get('user_id')
+
+def apply_owner_scope(query=None):
+    scoped_query = dict(query or {})
+    scoped_query['ownerId'] = current_owner_id()
+    return scoped_query
 
 def calculate_average(marks):
     if not marks:
@@ -32,7 +40,7 @@ def get_status(avg, attendance):
 @token_required
 def dashboard():
     col = get_collection('students')
-    students = list(col.find({}))
+    students = list(col.find(apply_owner_scope()))
     
     if not students:
         return jsonify({
@@ -106,13 +114,13 @@ def dashboard():
 @token_required
 def student_analytics(student_id):
     col = get_collection('students')
-    students = list(col.find({}))
+    students = list(col.find(apply_owner_scope()))
     
     from bson import ObjectId
     try:
-        s = col.find_one({'_id': ObjectId(student_id)})
+        s = col.find_one(apply_owner_scope({'_id': ObjectId(student_id)}))
     except:
-        s = col.find_one({'studentId': student_id})
+        s = col.find_one(apply_owner_scope({'studentId': student_id}))
     
     if not s:
         return jsonify({'error': 'Student not found'}), 404
