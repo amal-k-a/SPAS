@@ -73,6 +73,19 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Create CI environment file
+        run: |
+          cat <<EOF > .env
+          SMTP_HOST=
+          SMTP_PORT=587
+          SMTP_USERNAME=
+          SMTP_PASSWORD=
+          SMTP_FROM_EMAIL=
+          SMTP_USE_TLS=true
+          EMAIL_DEBUG=true
+          VERIFICATION_TTL_MINUTES=10
+          EOF
+
       - name: Start application with docker-compose
         run: docker compose up -d --build
 
