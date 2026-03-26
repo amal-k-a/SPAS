@@ -39,6 +39,12 @@ export interface AuthResponse {
   isFirstLogin: boolean;
 }
 
+export interface VerificationCodeResponse {
+  message: string;
+  expiresInMinutes: number;
+  debugCode?: string;
+}
+
 export interface UploadResponse {
   message: string;
   inserted: number;

@@ -23,7 +23,7 @@ import { AuthService } from '../../services/auth.service';
           <h1 class="text-3xl font-black text-[#1C1C1C] tracking-tight">Change Your Password</h1>
           <p class="text-sm text-gray-500 mt-3 leading-6">
             {{ isFirstLogin
-              ? 'Your account is still using the default password. Set a new password now to continue into the portal.'
+              ? 'Your account still needs a password update before you can continue into the portal.'
               : 'Update your current password any time to keep your account secure.' }}
           </p>
         </div>
@@ -39,7 +39,7 @@ import { AuthService } from '../../services/auth.service';
         <div class="space-y-5">
           <div>
             <label class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-2 ml-1">Current Password</label>
-            <input type="password" [(ngModel)]="currentPassword" [placeholder]="isFirstLogin ? 'welcome123' : 'Enter current password'"
+            <input type="password" [(ngModel)]="currentPassword" [placeholder]="isFirstLogin ? 'Enter your current temporary password' : 'Enter current password'"
               class="w-full bg-gray-50 border-none rounded-2xl px-5 py-4 text-sm focus:ring-2 focus:ring-yellow-400 transition-all placeholder:text-gray-300">
           </div>
 

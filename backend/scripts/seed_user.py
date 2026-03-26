@@ -19,7 +19,7 @@ def main():
     parser.add_argument('--email', required=True, help='Faculty email address')
     parser.add_argument('--name', required=True, help='Display name')
     parser.add_argument('--role', required=True, choices=['admin', 'teacher'], help='User role')
-    parser.add_argument('--password', default='welcome123', help='Initial password')
+    parser.add_argument('--password', required=True, help='Initial password')
     parser.add_argument('--first-login', action='store_true', help='Force password change on next login')
     args = parser.parse_args()
 

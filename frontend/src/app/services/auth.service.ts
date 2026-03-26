@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap } from 'rxjs';
-import { AuthResponse } from '../models/models';
+import { AuthResponse, VerificationCodeResponse } from '../models/models';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -15,6 +15,16 @@ export class AuthService {
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap(res => this.persistAuth(res))
+    );
+  }
+
+  requestVerificationCode(email: string): Observable<VerificationCodeResponse> {
+    return this.http.post<VerificationCodeResponse>(`${this.apiUrl}/request-verification-code`, { email });
+  }
+
+  activateAccount(email: string, code: string, password: string, name: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/activate-account`, { email, code, password, name }).pipe(
       tap(res => this.persistAuth(res))
     );
   }

@@ -27,10 +27,20 @@ services:
       dockerfile: Dockerfile
     container_name: student-analytics-backend
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       MONGO_URI: mongodb://mongo:27017/student_analytics
       SECRET_KEY: your-secret-key-change-in-production-2024
       FLASK_ENV: production
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USERNAME: ${SMTP_USERNAME:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL:-}
+      SMTP_USE_TLS: ${SMTP_USE_TLS:-true}
+      EMAIL_DEBUG: ${EMAIL_DEBUG:-false}
+      VERIFICATION_TTL_MINUTES: ${VERIFICATION_TTL_MINUTES:-10}
     depends_on:
       mongo:
         condition: service_healthy
